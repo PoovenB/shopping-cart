@@ -45,24 +45,30 @@ graph TD;
     a[Client]-->c[Security]
     a-->b[User Manager]
     a-->e[Order Manager];
-    a-->d[Product Manager]
-    b-->f[User Access];
+    a-->d[Product Manager];
     d-->g[Product Access];
     e-->h[Ordering Engine];
     h-->g;
     h-->i[Order Access];
     h-->f
+    b-->f[User Access];
 ```
 
 ## Resource Access
 
+### Order Access
 1. Add to cart
 1. Remove from cart
 1. Get cart (supports pagination)
 1. Update product qantity in cart
+1. Complete order (store order)
+
+### Product Access
 1. Reserve quantity (reduce quantity against a cart)
 1. Undo reservation (re-add stock)
-1. Checkout cart (commit reserved quantities and store order)
-2. Register user
-2. Validate user
-3. Get products (supports pagination)
+1. Checkout (commit reserved quantities)
+
+### User Access
+1. Register user
+1. Validate user
+8. Get products (supports pagination)
