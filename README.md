@@ -11,13 +11,13 @@
 # Use-Cases
 ## Core Use-Case
 
-1. Allow users to purchase products.
+1. Allow users to order products.
 
 ## Technical Requirements
 
 1. *Who*: customer
 2. *What*: puchase products, send emails
-3. *How*: resource access
+3. *How*: product inventory, resource access
 4. *Where*: local database
 
 ### Customers
@@ -28,17 +28,17 @@
 
 ### Products
 
-1. Store product information, and stock.
+1. Fetch product information, and stock.
 
 ### Orders
 
 2. Store cart information.
-3. Allow products to be added to a shopping cart.
+3. Allow products to be added to and removed from the shopping cart.
 4. Provide access to the shopping cart.
 5. Warn user is product is no longer available.
 6. Checkout decreases quantity of stock and sends an email receipt.
 
-# Layered Architecture
+# Architecture
 
 ```mermaid
 graph TD;
@@ -53,6 +53,54 @@ graph TD;
     h-->f
     b-->f[User Access];
 ```
+
+## Public Endpoints
+
+These endpoints use origin access control, and rate limiting.
+
+### Register User
+<code>POST /accounts/register</code>
+
+| Field | Description |
+|-------|-------------|
+| email | The user's email address. |
+| password | The user's password.   |
+
+### Login
+<code>POST /logins</code>
+
+| Field | Description |
+|-------|-------------|
+| email | The user's email address. |
+| password | The user's password.   |
+
+Returns: user token
+
+### Get Products
+<code>GET /products?pageNumber={pageNumber}&pageSize={pageSize}</code>
+
+Headers: cache-control support.
+
+Returns: product information, with paging, defaults to 50.
+
+### Update Cart
+<code>PATCH /carts/product/{productId}?quantity={quantity}</code>
+
+Headers: user token
+
+### Fetch Cart
+<code>GET /carts</code>
+
+Headers: user token
+
+Returns: products in cart, and products no longer available.
+
+### Checkout
+<code>GET /carts/checkout</code>
+
+Headers: user token
+
+Returns: order information, otherwise products that are no longer available.
 
 ## Resource Access
 
